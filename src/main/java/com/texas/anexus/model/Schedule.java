@@ -5,8 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+@SuppressWarnings("serial")
 @Entity
-public class Schedule {
+public class Schedule extends AbstractEntity {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -17,6 +18,8 @@ public class Schedule {
 	private Long month;
 	private Long hrs;
 	private Long min;
+	private Long userId;
+	
 	
 	
 	

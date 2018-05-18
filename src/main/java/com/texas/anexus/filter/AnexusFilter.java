@@ -16,9 +16,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
-public class LocalLevelFilter implements Filter {
+public class AnexusFilter implements Filter {
 
-	private static final Logger LOG = LoggerFactory.getLogger(LocalLevelFilter.class);
+	private static final Logger LOG = LoggerFactory.getLogger(AnexusFilter.class);
 
 	@Override
 	public void destroy() {
