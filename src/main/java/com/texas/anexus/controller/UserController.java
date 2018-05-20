@@ -60,5 +60,13 @@ public class UserController {
 		return new ResponseEntity<Object>("Edited Successfully", HttpStatus.OK);
 
 	}
+	
+	@ApiOperation(value="Delete the user")
+	@RequestMapping(method=RequestMethod.DELETE)
+	public ResponseEntity<Object> deleteUser(@RequestHeader Long id){
+		userService.deleteUser(id);
+		return new ResponseEntity<Object>("Edited Successfully",HttpStatus.OK);
+		
+	}
 
 }
