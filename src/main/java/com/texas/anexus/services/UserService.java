@@ -7,6 +7,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 import javax.validation.ValidationException;
 
+import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -57,7 +58,7 @@ public class UserService {
 		login.setLoginStatus(LoginStatus.LOGOUT);
 		login.setStatus(Status.ACTIVE);
 		login.setCreatedDate(new Date());
-		loginRepository.save(login);
+//		loginRepository.save(login);
 
 		/* For storing address */
 		Address address = new Address();
@@ -68,28 +69,21 @@ public class UserService {
 		address.setMetropolitan(metropolitan);
 		address.setSubMetropolitan(subMetropolitan);
 		address.setStatus(Status.ACTIVE);
-		addressRepository.save(address);
+//		addressRepository.save(address);
 
 		/* For creating user */
 		User user = new User();
-		if (Validator.getStringValidator(userCreationRequest.getFullName()) == false) {
-			throw new ValidationException("Only Alphabets allowed in name.");
-		} else {
-			user.setFullName(userCreationRequest.getFullName());
-		}
-		if (Validator.getPhoneValidator(userCreationRequest.getPhoneNo()) == false) {
-			throw new ValidationException("Please enter valid phone number.");
-		} else {
-			user.setPhoneNo(userCreationRequest.getPhoneNo());
-		}
 
-		if (Validator.getEmailValidator(userCreationRequest.getEmail()) == false) {
-			throw new ValidationException("Please enter a valid email address.");
-		} else {
-			user.setEmail(userCreationRequest.getEmail());
-		}
+		user.setFirstName(userCreationRequest.getFirstName());
+		user.setMiddleName(userCreationRequest.getMiddleName());
+		user.setLastName(userCreationRequest.getLastName());
+		user.setPhoneNo(userCreationRequest.getPhoneNo());
 
-		user.setLoginId(login.getId());
+		user.setEmail(userCreationRequest.getEmail());
+
+		loginRepository.save(login);
+		addressRepository.save(address);
+		user.setLogin(login);
 		user.setAddress(address);
 		user.setCreatedDate(new Date());
 		user.setUserRole(UserRole.USER);
@@ -106,7 +100,7 @@ public class UserService {
 		}
 		UserResponse ur = new UserResponse();
 		Address address = addressRepository.findByIdAndStatusNot(user.getAddress().getId(), Status.DELETED);
-		AddressResponse ar=new AddressResponse();
+		AddressResponse ar = new AddressResponse();
 		ar.setDistrict(address.getDistrict());
 		ar.setState(address.getState());
 		ar.setMetropolitan(address.getMetropolitan());
@@ -116,7 +110,12 @@ public class UserService {
 		System.out.println(address.toString());
 		ur.setAddressResponse(ar);
 		ur.setEmail(user.getEmail());
-		ur.setFullName(user.getFullName());
+		ur.setId(user.getId());
+		String firstName=user.getFirstName();
+		String middelName=user.getMiddleName();
+		String lastName=user.getLastName();
+		String fullName=firstName.concat(" "+middelName.concat(" "+lastName));
+		ur.setFullName(fullName);
 		ur.setPhoneNo(user.getPhoneNo());
 		return ur;
 
@@ -125,12 +124,12 @@ public class UserService {
 	@Transactional
 	public List<UserResponse> getAllUser() {
 
-		List<UserResponse> userList=new ArrayList<UserResponse>();
-		List<User> user=userRepository.findAllByStatusNot(Status.DELETED);
-		user.stream().forEach(u->{
+		List<UserResponse> userList = new ArrayList<UserResponse>();
+		List<User> user = userRepository.findAllByStatusNot(Status.DELETED);
+		user.stream().forEach(u -> {
 			UserResponse ur = new UserResponse();
 			Address address = addressRepository.findByIdAndStatusNot(u.getAddress().getId(), Status.DELETED);
-			AddressResponse ar=new AddressResponse();
+			AddressResponse ar = new AddressResponse();
 			ar.setDistrict(address.getDistrict());
 			ar.setState(address.getState());
 			ar.setMetropolitan(address.getMetropolitan());
@@ -140,7 +139,13 @@ public class UserService {
 			System.out.println(address.toString());
 			ur.setAddressResponse(ar);
 			ur.setEmail(u.getEmail());
-			ur.setFullName(u.getFullName());
+			ur.setId(u.getId());
+			String firstName=u.getFirstName();
+			String middelName=u.getMiddleName();
+			String lastName=u.getLastName();
+			String fullName=firstName.concat(" "+middelName.concat(" "+lastName));
+			ur.setFullName(fullName);
+			//ur.setFullName(u.getFullName());
 			ur.setPhoneNo(u.getPhoneNo());
 			userList.add(ur);
 		});
@@ -154,33 +159,66 @@ public class UserService {
 		if (user == null) {
 			throw new NotFoundException("User with id:" + id + " not found!");
 		}
-		Address address=addressRepository.findByIdAndStatusNot(user.getAddress().getId(),Status.DELETED);
-	    address.setDistrict(userEditRequest.getAddressEditRequest().getDistrict());
-	    address.setState(userEditRequest.getAddressEditRequest().getState());
-	    address.setRuralMunicipality(userEditRequest.getAddressEditRequest().getRuralMunicipality());
-	    address.setMunicipality(userEditRequest.getAddressEditRequest().getMunicipality());
-	    address.setMetropolitan(userEditRequest.getAddressEditRequest().getMetropolitan());
-	    address.setSubMetropolitan(userEditRequest.getAddressEditRequest().getSubMetropolitan());
-	    
-	   
-	    address.setModifiedDate(new Date());
-	    user.setAddress(address);
-	    user.setEmail(userEditRequest.getEmail());
-	    user.setFullName(userEditRequest.getFullName());
-	    user.setPhoneNo(userEditRequest.getPhoneNo());
-	    user.setModifiedDate(new Date());
+		Address address = addressRepository.findByIdAndStatusNot(user.getAddress().getId(), Status.DELETED);
+		address.setDistrict(userEditRequest.getAddressEditRequest().getDistrict());
+		address.setState(userEditRequest.getAddressEditRequest().getState());
+		address.setRuralMunicipality(userEditRequest.getAddressEditRequest().getRuralMunicipality());
+		address.setMunicipality(userEditRequest.getAddressEditRequest().getMunicipality());
+		address.setMetropolitan(userEditRequest.getAddressEditRequest().getMetropolitan());
+		address.setSubMetropolitan(userEditRequest.getAddressEditRequest().getSubMetropolitan());
+
+		address.setModifiedDate(new Date());
+		user.setAddress(address);
+		//user.setId(u.getId());
+		user.setEmail(userEditRequest.getEmail());
+		user.setFirstName(userEditRequest.getFirstName());
+		user.setMiddleName(userEditRequest.getMiddleName());
+		user.setLastName(userEditRequest.getLastName());
+		user.setPhoneNo(userEditRequest.getPhoneNo());
+		user.setModifiedDate(new Date());
 		userRepository.save(user);
 	}
 
 	@Transactional
 	public void deleteUser(Long id) {
-		User user=userRepository.findByIdAndStatusNot(id, Status.DELETED);
-		if(user==null) {
-			throw new NotFoundException("User not found with id:"+id);
+		User user = userRepository.findByIdAndStatusNot(id, Status.DELETED);
+		if (user == null) {
+			throw new NotFoundException("User not found with id:" + id);
 		}
 		user.setStatus(Status.DELETED);
 		userRepository.save(user);
-		
+
+	}
+
+	public List<UserResponse> getUserByUsername(String firstName, Long loginId) {
+		List<UserResponse> userResponseList=new ArrayList<UserResponse>();
+		Login login=loginRepository.findByIdAndLoginStatusNot(loginId, LoginStatus.LOGOUT);
+		if(login==null) {
+			throw new ServiceException("Please Login first");
+		}
+		List<User> users=userRepository.findByFirstNameAndStatusNot(firstName,Status.DELETED);
+		users.stream().forEach(u->{
+			UserResponse ur=new UserResponse();
+			ur.setId(u.getId());
+			String firstNames=u.getFirstName();
+			String middelName=u.getMiddleName();
+			String lastName=u.getLastName();
+			String fullName=firstNames.concat(" "+middelName.concat(" "+lastName));
+			ur.setFullName(fullName);
+			ur.setEmail(u.getEmail());
+			ur.setPhoneNo(u.getPhoneNo());
+			Address address = addressRepository.findByIdAndStatusNot(u.getAddress().getId(), Status.DELETED);
+			AddressResponse ar = new AddressResponse();
+			ar.setDistrict(address.getDistrict());
+			ar.setState(address.getState());
+			ar.setMetropolitan(address.getMetropolitan());
+			ar.setMunicipality(address.getMunicipality());
+			ar.setRuralMunicipality(address.getRuralMunicipality());
+			ar.setSubMetropolitan(address.getSubMetropolitan());
+			ur.setAddressResponse(ar);
+			userResponseList.add(ur);
+		});
+		return userResponseList;
 	}
 
 }

@@ -37,7 +37,7 @@ public class LoginService {
 		else {
 			throw new ServiceException("Incorrect Password!");
 		}
-		
+		login.setDevviceId(loginDto.getDeviceId());
 		Map<Object,Object> response= new HashMap<>();
 		response.put("username",login.getUsername());
 		response.put("id", login.getId());

@@ -1,11 +1,15 @@
 package com.texas.anexus.model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.OneToOne;
 
 import com.texas.anexus.util.LoginStatus;
 
+@SuppressWarnings("serial")
 @Entity
 public class Login  extends AbstractEntity{
 	
@@ -15,6 +19,16 @@ public class Login  extends AbstractEntity{
 	
 	@Enumerated(EnumType.STRING)
 	private LoginStatus loginStatus;
+	
+	@OneToOne(mappedBy = "login", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private User user;
+
+	public Login(Long loginId) {
+		this.id=loginId;
+	}
+
+	public Login() {
+	}
 
 	public String getUsername() {
 		return username;
@@ -47,6 +61,15 @@ public class Login  extends AbstractEntity{
 	public void setLoginStatus(LoginStatus loginStatus) {
 		this.loginStatus = loginStatus;
 	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
 	
 	
 

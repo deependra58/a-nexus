@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,11 +38,18 @@ public class UserController {
 	}
 
 	@ApiOperation(value = "Get User by Id")
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@RequestMapping(value = "id/{id}", method = RequestMethod.GET)
 	public ResponseEntity<Object> getUser(@RequestParam Long id) {
 		UserResponse us = userService.getUser(id);
 		return new ResponseEntity<Object>(us, HttpStatus.OK);
 
+	}
+	
+	@ApiOperation(value="Get User by FirstName")
+	@RequestMapping(value="firstName/{firstName:.+}", method=RequestMethod.GET)
+	public ResponseEntity<Object> getUserByUsername(@PathVariable String firstName,@RequestHeader Long loginId){
+		List<UserResponse> ur=userService.getUserByUsername(firstName,loginId);
+		return new ResponseEntity<Object>(ur,HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Get All users")

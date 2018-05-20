@@ -2,7 +2,9 @@ package com.texas.anexus.request;
 
 public class UserRegisterRequest {
 
-	private String fullName;
+	private String firstName;
+	private String middleName;
+	private String lastName;
 	private String phoneNo;
 	private String email;
 	private String state;
@@ -26,12 +28,28 @@ public class UserRegisterRequest {
 		this.password = password;
 	}
 
-	public String getFullName() {
-		return fullName;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getMiddleName() {
+		return middleName;
+	}
+
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getPhoneNo() {

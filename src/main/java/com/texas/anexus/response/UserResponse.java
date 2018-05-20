@@ -3,6 +3,7 @@ package com.texas.anexus.response;
 
 public class UserResponse {
 
+	private Long id;
 	private String fullName;
 	private String phoneNo;
 	private String email;
@@ -31,5 +32,12 @@ public class UserResponse {
 	public void setAddressResponse(AddressResponse addressResponse) {
 		this.addressResponse = addressResponse;
 	}
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	
 	
 }

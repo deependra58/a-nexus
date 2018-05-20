@@ -1,54 +1,80 @@
 package com.texas.anexus.model;
 
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import com.texas.anexus.util.Status;
 import com.texas.anexus.util.UserRole;
 
 @SuppressWarnings("serial")
 @Entity
-public class User extends AbstractEntity{
-	private String fullName;
+public class User extends AbstractEntity {
+	private String firstName;
+	private String middleName;
+	private String lastName;
 	private String phoneNo;
 	private String email;
 	private String profilePicture;
 	private String rating;
-	private Long loginId;
-	
+	@OneToOne
+	private Login login;
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<Schedule> schedule;
+
 	@Enumerated(EnumType.STRING)
 	private UserRole userRole;
-	
+
 	@Enumerated(EnumType.STRING)
 	private Status status;
-	
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="address_id")
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "address_id")
 	private Address address;
 
-	public String getFullName() {
-		return fullName;
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getMiddleName() {
+		return middleName;
+	}
+
+	public void setMiddleName(String middleName) {
+		this.middleName = middleName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
 	public String getPhoneNo() {
 		return phoneNo;
 	}
 
-	
-	public Long getLoginId() {
-		return loginId;
+	public Login getLogin() {
+		return login;
 	}
 
-	public void setLoginId(Long loginId) {
-		this.loginId = loginId;
+	public void setLogin(Login login) {
+		this.login = login;
 	}
 
 	public void setPhoneNo(String phoneNo) {
@@ -102,7 +128,13 @@ public class User extends AbstractEntity{
 	public void setAddress(Address address) {
 		this.address = address;
 	}
-	
-	
+
+	public List<Schedule> getSchedule() {
+		return schedule;
+	}
+
+	public void setSchedule(List<Schedule> schedule) {
+		this.schedule = schedule;
+	}
 
 }
