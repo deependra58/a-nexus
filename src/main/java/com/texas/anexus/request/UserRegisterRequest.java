@@ -1,16 +1,28 @@
 package com.texas.anexus.request;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserRegisterRequest {
 
 	private String firstName;
 	private String middleName;
 	private String lastName;
 	private String phoneNo;
+	private ArrayList<String> interestField;
 	private String email;
 	private String state;
 	private String district;
 	private String username;
 	private String password;
+
+	public ArrayList<String> getInterestField() {
+		return interestField;
+	}
+
+	public void setInterestField(ArrayList<String> interestField) {
+		this.interestField = interestField;
+	}
 
 	public String getUsername() {
 		return username;

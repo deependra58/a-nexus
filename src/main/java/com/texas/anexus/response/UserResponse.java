@@ -1,5 +1,6 @@
 package com.texas.anexus.response;
 
+import java.util.List;
 
 public class UserResponse {
 
@@ -8,6 +9,14 @@ public class UserResponse {
 	private String phoneNo;
 	private String email;
 	private AddressResponse addressResponse;
+	private List<String> interestField;
+	
+	public List<String> getInterestField() {
+		return interestField;
+	}
+	public void setInterestField(List<String> interestField) {
+		this.interestField = interestField;
+	}
 	public String getFullName() {
 		return fullName;
 	}

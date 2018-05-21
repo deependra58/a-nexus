@@ -16,6 +16,8 @@ import com.texas.anexus.request.ScheduleCreationRequest;
 import com.texas.anexus.response.ScheduleResponse;
 import com.texas.anexus.services.ScheduleService;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
@@ -25,6 +27,10 @@ public class ScheduleController {
 	@Autowired
 	private ScheduleService scheduleService;
 	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "token", required = true, dataType = "string", paramType = "header") })
+
+	
 	@ApiOperation(value="post schedule")
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Object> postSchedule(@RequestBody ScheduleCreationRequest scheduleCreationRequest, @RequestHeader Long loginId){
@@ -33,6 +39,9 @@ public class ScheduleController {
 		return new ResponseEntity<Object>("Schedule Posted successfully",HttpStatus.OK);
 			
 	}
+	
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "token", required = true, dataType = "string", paramType = "header") })
 	
 	/*userId is that userId whose schedule i want to see*/
 	@ApiOperation(value="get schedule")

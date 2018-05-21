@@ -11,8 +11,8 @@ public class Constant {
 	public static final String TOKEN_INVALID_OR_EXPIRED = "Token is either Invalid/Expired!";
 	public static final String USER_ID_AND_TOKEN_MISMATCH = "User id and token mismatch!";
 	public static final String EMAIL_AND_PASSWORD_MISMATCH = "Email and password mismatch!";
-	public static final String LOGIN_API_V1 = "/rest/v1/login";
-	public static final String LOGOUT_API_V1 = "/rest/v1/logout";
+	public static final String LOGIN_API_V1 = "/rest/login";
+	public static final String LOGOUT_API_V1 = "/rest/logout";
 	public static final String SWAGGER_URL = "/swagger-ui.html";
 	public static final String STATUS_API = "/api/v1/status";
 	public static final String ENABLE = "ENABLE";

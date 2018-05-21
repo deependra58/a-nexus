@@ -23,8 +23,10 @@ import com.texas.anexus.request.AddressEditRequest;
 import com.texas.anexus.request.UserEditRequest;
 import com.texas.anexus.request.UserRegisterRequest;
 import com.texas.anexus.response.AddressResponse;
+import com.texas.anexus.response.InterestFieldResponse;
 import com.texas.anexus.response.UserResponse;
 import com.texas.anexus.util.BCrypt;
+import com.texas.anexus.util.InterestField;
 import com.texas.anexus.util.LoginStatus;
 import com.texas.anexus.util.Status;
 import com.texas.anexus.util.UserRole;
@@ -78,7 +80,10 @@ public class UserService {
 		user.setMiddleName(userCreationRequest.getMiddleName());
 		user.setLastName(userCreationRequest.getLastName());
 		user.setPhoneNo(userCreationRequest.getPhoneNo());
-
+		user.setInterestField(userCreationRequest.getInterestField());
+//		List<InterestFieldResponse> ifr=new ArrayList<InterestFieldResponse>();
+//		List<String> ir=userCreationRequest.getInterestField();
+	
 		user.setEmail(userCreationRequest.getEmail());
 
 		loginRepository.save(login);
@@ -140,10 +145,15 @@ public class UserService {
 			ur.setAddressResponse(ar);
 			ur.setEmail(u.getEmail());
 			ur.setId(u.getId());
+			ur.setInterestField(u.getInterestField());
 			String firstName=u.getFirstName();
 			String middelName=u.getMiddleName();
+			if(middelName==null) {
+				middelName="";
+			}
 			String lastName=u.getLastName();
 			String fullName=firstName.concat(" "+middelName.concat(" "+lastName));
+			System.out.println("----------------------------------------------"+fullName);
 			ur.setFullName(fullName);
 			//ur.setFullName(u.getFullName());
 			ur.setPhoneNo(u.getPhoneNo());

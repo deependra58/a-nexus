@@ -1,5 +1,6 @@
 package com.texas.anexus.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -25,6 +26,8 @@ public class User extends AbstractEntity {
 	private String email;
 	private String profilePicture;
 	private String rating;
+	ArrayList<String> interestField = new ArrayList<String>();
+
 	@OneToOne
 	private Login login;
 
@@ -40,6 +43,14 @@ public class User extends AbstractEntity {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "address_id")
 	private Address address;
+
+	public ArrayList<String> getInterestField() {
+		return interestField;
+	}
+
+	public void setInterestField(ArrayList<String> interestField) {
+		this.interestField = interestField;
+	}
 
 	public String getFirstName() {
 		return firstName;

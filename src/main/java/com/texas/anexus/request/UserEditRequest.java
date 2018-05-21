@@ -1,15 +1,28 @@
 package com.texas.anexus.request;
 
-import com.texas.anexus.model.Address;
+import java.util.List;
+
+import com.texas.anexus.util.InterestField;
 
 public class UserEditRequest {
 
 	private String firstName;
 	private String middleName;
 	private String lastName;
+	private List<String> interestField;
 	private String phoneNo;
 	private String email;
 	private AddressEditRequest addressEditRequest;
+
+	
+
+	public List<String> getInterestField() {
+		return interestField;
+	}
+
+	public void setInterestField(List<String> interestField) {
+		this.interestField = interestField;
+	}
 
 	public AddressEditRequest getAddressEditRequest() {
 		return addressEditRequest;
