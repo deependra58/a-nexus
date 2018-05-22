@@ -8,13 +8,22 @@ public class UserResponse {
 	private String fullName;
 	private String phoneNo;
 	private String email;
+	private String profilePicture;
 	private AddressResponse addressResponse;
-	private List<String> interestField;
+	private String[] interestField;
 	
-	public List<String> getInterestField() {
+	
+
+	public String getProfilePicture() {
+		return profilePicture;
+	}
+	public void setProfilePicture(String profilePicture) {
+		this.profilePicture = profilePicture;
+	}
+	public String[] getInterestField() {
 		return interestField;
 	}
-	public void setInterestField(List<String> interestField) {
+	public void setInterestField(String[] interestField) {
 		this.interestField = interestField;
 	}
 	public String getFullName() {

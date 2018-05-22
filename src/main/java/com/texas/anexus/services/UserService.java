@@ -1,16 +1,17 @@
 package com.texas.anexus.services;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
-import javax.validation.ValidationException;
 
 import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.texas.anexus.cloud.CloudinaryResource;
 import com.texas.anexus.exceptions.AlreadyExistException;
 import com.texas.anexus.exceptions.NotFoundException;
 import com.texas.anexus.model.Address;
@@ -19,18 +20,16 @@ import com.texas.anexus.model.User;
 import com.texas.anexus.repository.AddressRepository;
 import com.texas.anexus.repository.LoginRepository;
 import com.texas.anexus.repository.UserRepository;
-import com.texas.anexus.request.AddressEditRequest;
+import com.texas.anexus.request.AdditionalRegisterCreationRequest;
 import com.texas.anexus.request.UserEditRequest;
 import com.texas.anexus.request.UserRegisterRequest;
 import com.texas.anexus.response.AddressResponse;
-import com.texas.anexus.response.InterestFieldResponse;
 import com.texas.anexus.response.UserResponse;
 import com.texas.anexus.util.BCrypt;
-import com.texas.anexus.util.InterestField;
+import com.texas.anexus.util.FileUtil;
 import com.texas.anexus.util.LoginStatus;
 import com.texas.anexus.util.Status;
 import com.texas.anexus.util.UserRole;
-import com.texas.anexus.util.Validator;
 
 @Service
 public class UserService {
@@ -45,8 +44,7 @@ public class UserService {
 	private LoginRepository loginRepository;
 
 	@Transactional
-	public void registerUser(UserRegisterRequest userCreationRequest, String ruralMunicipality, String municipality,
-			String metropolitan, String subMetropolitan) {
+	public void registerUser(UserRegisterRequest userCreationRequest) {
 
 		/* For Login */
 		Login login = loginRepository.findByUsernameAndStatusNot(userCreationRequest.getUsername(), Status.DELETED);
@@ -66,29 +64,33 @@ public class UserService {
 		Address address = new Address();
 		address.setDistrict(userCreationRequest.getDistrict());
 		address.setState(userCreationRequest.getState());
-		address.setRuralMunicipality(ruralMunicipality);
-		address.setMunicipality(municipality);
-		address.setMetropolitan(metropolitan);
-		address.setSubMetropolitan(subMetropolitan);
+		address.setLocalLevel(userCreationRequest.getLocalLevel());
+
+//		address.setRuralMunicipality(ruralMunicipality);
+//		address.setMunicipality(municipality);
+//		address.setMetropolitan(metropolitan);
+//		address.setSubMetropolitan(subMetropolitan);
 		address.setStatus(Status.ACTIVE);
 //		addressRepository.save(address);
 
 		/* For creating user */
 		User user = new User();
 
-		user.setFirstName(userCreationRequest.getFirstName());
-		user.setMiddleName(userCreationRequest.getMiddleName());
-		user.setLastName(userCreationRequest.getLastName());
-		user.setPhoneNo(userCreationRequest.getPhoneNo());
-		user.setInterestField(userCreationRequest.getInterestField());
+//		user.setFirstName(userCreationRequest.getFirstName());
+//		user.setMiddleName(userCreationRequest.getMiddleName());
+//		user.setLastName(userCreationRequest.getLastName());
+//		user.setPhoneNo(userCreationRequest.getPhoneNo());
+//		user.setInterestField(userCreationRequest.getInterestField());
 //		List<InterestFieldResponse> ifr=new ArrayList<InterestFieldResponse>();
 //		List<String> ir=userCreationRequest.getInterestField();
-	
+
 		user.setEmail(userCreationRequest.getEmail());
 
 		loginRepository.save(login);
 		addressRepository.save(address);
 		user.setLogin(login);
+		user.setGender(userCreationRequest.getGender());
+		user.setFullName(userCreationRequest.getFullName());
 		user.setAddress(address);
 		user.setCreatedDate(new Date());
 		user.setUserRole(UserRole.USER);
@@ -108,19 +110,20 @@ public class UserService {
 		AddressResponse ar = new AddressResponse();
 		ar.setDistrict(address.getDistrict());
 		ar.setState(address.getState());
-		ar.setMetropolitan(address.getMetropolitan());
-		ar.setMunicipality(address.getMunicipality());
-		ar.setRuralMunicipality(address.getRuralMunicipality());
-		ar.setSubMetropolitan(address.getSubMetropolitan());
+//		ar.setMetropolitan(address.getMetropolitan());
+//		ar.setMunicipality(address.getMunicipality());
+//		ar.setRuralMunicipality(address.getRuralMunicipality());
+//		ar.setSubMetropolitan(address.getSubMetropolitan());
 		System.out.println(address.toString());
 		ur.setAddressResponse(ar);
 		ur.setEmail(user.getEmail());
 		ur.setId(user.getId());
-		String firstName=user.getFirstName();
-		String middelName=user.getMiddleName();
-		String lastName=user.getLastName();
-		String fullName=firstName.concat(" "+middelName.concat(" "+lastName));
-		ur.setFullName(fullName);
+		ur.setProfilePicture(user.getProfilePicture());
+//		String firstName=user.getFirstName();
+//		String middelName=user.getMiddleName();
+//		String lastName=user.getLastName();
+//		String fullName=firstName.concat(" "+middelName.concat(" "+lastName));
+		ur.setFullName(user.getFullName());
 		ur.setPhoneNo(user.getPhoneNo());
 		return ur;
 
@@ -137,25 +140,26 @@ public class UserService {
 			AddressResponse ar = new AddressResponse();
 			ar.setDistrict(address.getDistrict());
 			ar.setState(address.getState());
-			ar.setMetropolitan(address.getMetropolitan());
-			ar.setMunicipality(address.getMunicipality());
-			ar.setRuralMunicipality(address.getRuralMunicipality());
-			ar.setSubMetropolitan(address.getSubMetropolitan());
+//			ar.setMetropolitan(address.getMetropolitan());
+//			ar.setMunicipality(address.getMunicipality());
+//			ar.setRuralMunicipality(address.getRuralMunicipality());
+//			ar.setSubMetropolitan(address.getSubMetropolitan());
 			System.out.println(address.toString());
 			ur.setAddressResponse(ar);
 			ur.setEmail(u.getEmail());
 			ur.setId(u.getId());
-			ur.setInterestField(u.getInterestField());
-			String firstName=u.getFirstName();
-			String middelName=u.getMiddleName();
-			if(middelName==null) {
-				middelName="";
-			}
-			String lastName=u.getLastName();
-			String fullName=firstName.concat(" "+middelName.concat(" "+lastName));
-			System.out.println("----------------------------------------------"+fullName);
-			ur.setFullName(fullName);
-			//ur.setFullName(u.getFullName());
+			ur.setProfilePicture(u.getProfilePicture());
+			// ur.setInterestField(u.getInterestField());
+//			String firstName=u.getFirstName();
+//			String middelName=u.getMiddleName();
+//			if(middelName==null) {
+//				middelName="";
+//			}
+//			String lastName=u.getLastName();
+//			String fullName=firstName.concat(" "+middelName.concat(" "+lastName));
+//			System.out.println("----------------------------------------------"+fullName);
+			ur.setFullName(u.getFullName());
+			// ur.setFullName(u.getFullName());
 			ur.setPhoneNo(u.getPhoneNo());
 			userList.add(ur);
 		});
@@ -172,18 +176,21 @@ public class UserService {
 		Address address = addressRepository.findByIdAndStatusNot(user.getAddress().getId(), Status.DELETED);
 		address.setDistrict(userEditRequest.getAddressEditRequest().getDistrict());
 		address.setState(userEditRequest.getAddressEditRequest().getState());
-		address.setRuralMunicipality(userEditRequest.getAddressEditRequest().getRuralMunicipality());
-		address.setMunicipality(userEditRequest.getAddressEditRequest().getMunicipality());
-		address.setMetropolitan(userEditRequest.getAddressEditRequest().getMetropolitan());
-		address.setSubMetropolitan(userEditRequest.getAddressEditRequest().getSubMetropolitan());
-
+//		address.setRuralMunicipality(userEditRequest.getAddressEditRequest().getRuralMunicipality());
+//		address.setMunicipality(userEditRequest.getAddressEditRequest().getMunicipality());
+//		address.setMetropolitan(userEditRequest.getAddressEditRequest().getMetropolitan());
+//		address.setSubMetropolitan(userEditRequest.getAddressEditRequest().getSubMetropolitan());
+		address.setLocalLevel(userEditRequest.getAddressEditRequest().getLocalLevel());
 		address.setModifiedDate(new Date());
 		user.setAddress(address);
-		//user.setId(u.getId());
+		// user.setId(u.getId());
 		user.setEmail(userEditRequest.getEmail());
-		user.setFirstName(userEditRequest.getFirstName());
-		user.setMiddleName(userEditRequest.getMiddleName());
-		user.setLastName(userEditRequest.getLastName());
+//		user.setFirstName(userEditRequest.getFirstName());
+//		user.setMiddleName(userEditRequest.getMiddleName());
+//		user.setLastName(userEditRequest.getLastName());
+		user.setInterestField(userEditRequest.getInterestField());
+		user.setSkills(userEditRequest.getSkills());
+		user.setFullName(userEditRequest.getFullName());
 		user.setPhoneNo(userEditRequest.getPhoneNo());
 		user.setModifiedDate(new Date());
 		userRepository.save(user);
@@ -201,34 +208,77 @@ public class UserService {
 	}
 
 	public List<UserResponse> getUserByUsername(String firstName, Long loginId) {
-		List<UserResponse> userResponseList=new ArrayList<UserResponse>();
-		Login login=loginRepository.findByIdAndLoginStatusNot(loginId, LoginStatus.LOGOUT);
-		if(login==null) {
+		List<UserResponse> userResponseList = new ArrayList<UserResponse>();
+		Login login = loginRepository.findByIdAndLoginStatusNot(loginId, LoginStatus.LOGOUT);
+		if (login == null) {
 			throw new ServiceException("Please Login first");
 		}
-		List<User> users=userRepository.findByFirstNameAndStatusNot(firstName,Status.DELETED);
-		users.stream().forEach(u->{
-			UserResponse ur=new UserResponse();
+		List<User> users = userRepository.findByFullNameAndStatusNot(firstName, Status.DELETED);
+		users.stream().forEach(u -> {
+			UserResponse ur = new UserResponse();
 			ur.setId(u.getId());
-			String firstNames=u.getFirstName();
-			String middelName=u.getMiddleName();
-			String lastName=u.getLastName();
-			String fullName=firstNames.concat(" "+middelName.concat(" "+lastName));
-			ur.setFullName(fullName);
+//			String firstNames=u.getFirstName();
+//			String middelName=u.getMiddleName();
+//			String lastName=u.getLastName();
+//			String fullName=firstNames.concat(" "+middelName.concat(" "+lastName));
+			ur.setFullName(u.getFullName());
 			ur.setEmail(u.getEmail());
 			ur.setPhoneNo(u.getPhoneNo());
 			Address address = addressRepository.findByIdAndStatusNot(u.getAddress().getId(), Status.DELETED);
 			AddressResponse ar = new AddressResponse();
 			ar.setDistrict(address.getDistrict());
 			ar.setState(address.getState());
-			ar.setMetropolitan(address.getMetropolitan());
-			ar.setMunicipality(address.getMunicipality());
-			ar.setRuralMunicipality(address.getRuralMunicipality());
-			ar.setSubMetropolitan(address.getSubMetropolitan());
+			ar.setLocalLevel(address.getLocalLevel());
+//			ar.setMetropolitan(address.getMetropolitan());
+//			ar.setMunicipality(address.getMunicipality());
+//			ar.setRuralMunicipality(address.getRuralMunicipality());
+//			ar.setSubMetropolitan(address.getSubMetropolitan());
 			ur.setAddressResponse(ar);
 			userResponseList.add(ur);
 		});
 		return userResponseList;
+	}
+
+	@Transactional
+	public void addRegisterUser(AdditionalRegisterCreationRequest addUserCreationRequest, Long loginId) {
+		Login login = loginRepository.findByIdAndLoginStatusNot(loginId, LoginStatus.LOGOUT);
+		if (login == null) {
+			throw new ServiceException("Please login!");
+		}
+		User user = userRepository.findByLoginAndStatusNot(login, Status.DELETED);
+		user.setPhoneNo(addUserCreationRequest.getPhoneNo());
+		user.setInterestField(addUserCreationRequest.getInterestedField());
+		user.setSkills(addUserCreationRequest.getSkills());
+		userRepository.save(user);
+	}
+
+	@SuppressWarnings("unused")
+	public void uploadProfilePicture(String profilePicture, Long loginId) {
+		Login login = loginRepository.findByIdAndLoginStatusNot(loginId, LoginStatus.LOGOUT);
+		if (login == null) {
+			throw new ServiceException("You are not logged in. Please login");
+		}
+		User user = userRepository.findByLoginAndStatusNot(login, Status.DELETED);
+		File file = null;
+		System.out.println("Hello from pp");
+		try {
+
+			if (profilePicture != null && !profilePicture.isEmpty()) {
+				//System.out.println("----------------------From pp");
+				user.setProfilePicture(
+						new CloudinaryResource().uploadFile(FileUtil.write("test", profilePicture),
+								FileUtil.getFileLocation(loginId, UserRole.USER)));
+				String path="https://res.cloudinary.com/anexus/image/upload/v1526985354/".concat(user.getProfilePicture());
+				user.setProfilePicture(path);
+				userRepository.save(user);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (file != null) {
+				file.delete();
+			}
+		}
 	}
 
 }

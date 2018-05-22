@@ -18,6 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long>{
 
 	User findByLoginAndStatusNot(Login login, Status deleted);
 
-	List<User> findByFirstNameAndStatusNot(String firstName, Status deleted);
+	List<User> findByFullNameAndStatusNot(String firstName, Status deleted);
+
 
 }

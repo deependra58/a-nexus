@@ -13,20 +13,25 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.texas.anexus.util.GenderType;
 import com.texas.anexus.util.Status;
 import com.texas.anexus.util.UserRole;
 
 @SuppressWarnings("serial")
 @Entity
 public class User extends AbstractEntity {
-	private String firstName;
-	private String middleName;
-	private String lastName;
+	private String fullName;
+//	private String middleName;
+//	private String lastName;
 	private String phoneNo;
 	private String email;
 	private String profilePicture;
 	private String rating;
-	ArrayList<String> interestField = new ArrayList<String>();
+	@Enumerated(EnumType.STRING)
+	private GenderType gender;
+	private String[] skills;
+	private String[] interestField;
+	
 
 	@OneToOne
 	private Login login;
@@ -44,41 +49,78 @@ public class User extends AbstractEntity {
 	@JoinColumn(name = "address_id")
 	private Address address;
 
-	public ArrayList<String> getInterestField() {
-		return interestField;
-	}
+	
 
-	public void setInterestField(ArrayList<String> interestField) {
-		this.interestField = interestField;
-	}
+//	public String getFirstName() {
+//		return firstName;
+//	}
+//
+//	public void setFirstName(String firstName) {
+//		this.firstName = firstName;
+//	}
+//
+//	public String getMiddleName() {
+//		return middleName;
+//	}
+//
+//	public void setMiddleName(String middleName) {
+//		this.middleName = middleName;
+//	}
+//
+//	public String getLastName() {
+//		return lastName;
+//	}
+//
+//	public void setLastName(String lastName) {
+//		this.lastName = lastName;
+//	}
 
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getMiddleName() {
-		return middleName;
-	}
-
-	public void setMiddleName(String middleName) {
-		this.middleName = middleName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
+	
+	
+//	public String[] getInterestField() {
+//		return interestField;
+//	}
+//
+//	public void setInterestField(String[] interestField) {
+//		this.interestField = interestField;
+//	}
+	
 
 	public String getPhoneNo() {
 		return phoneNo;
 	}
+
+	public String[] getInterestField() {
+		return interestField;
+	}
+
+	public void setInterestField(String[] interestField) {
+		this.interestField = interestField;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public GenderType getGender() {
+		return gender;
+	}
+
+	public void setGender(GenderType gender) {
+		this.gender = gender;
+	}
+
+//	public String[] getSkills() {
+//		return skills;
+//	}
+//
+//	public void setSkills(String[] skills) {
+//		this.skills = skills;
+//	}
 
 	public Login getLogin() {
 		return login;
@@ -99,6 +141,7 @@ public class User extends AbstractEntity {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+	
 
 	public String getProfilePicture() {
 		return profilePicture;
@@ -147,5 +190,15 @@ public class User extends AbstractEntity {
 	public void setSchedule(List<Schedule> schedule) {
 		this.schedule = schedule;
 	}
+
+	public String[] getSkills() {
+		return skills;
+	}
+
+	public void setSkills(String[] skills) {
+		this.skills = skills;
+	}
+
+	
 
 }

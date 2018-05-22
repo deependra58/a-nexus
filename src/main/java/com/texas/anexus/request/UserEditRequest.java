@@ -1,29 +1,36 @@
 package com.texas.anexus.request;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.texas.anexus.util.InterestField;
 
 public class UserEditRequest {
 
-	private String firstName;
-	private String middleName;
-	private String lastName;
-	private List<String> interestField;
+	private String fullName;
+	private String[] interestField;
+	private String[] skills;
 	private String phoneNo;
 	private String email;
 	private AddressEditRequest addressEditRequest;
 
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
+	}
+
+	public String[] getSkills() {
+		return skills;
+	}
+
+	public void setSkills(String[] skills) {
+		this.skills = skills;
+	}
+
 	
-
-	public List<String> getInterestField() {
-		return interestField;
-	}
-
-	public void setInterestField(List<String> interestField) {
-		this.interestField = interestField;
-	}
-
 	public AddressEditRequest getAddressEditRequest() {
 		return addressEditRequest;
 	}
@@ -31,29 +38,38 @@ public class UserEditRequest {
 	public void setAddressEditRequest(AddressEditRequest addressEditRequest) {
 		this.addressEditRequest = addressEditRequest;
 	}
+	
 
-	public String getFirstName() {
-		return firstName;
+//	public String getFirstName() {
+//		return firstName;
+//	}
+//
+//	public void setFirstName(String firstName) {
+//		this.firstName = firstName;
+//	}
+//
+//	public String getMiddleName() {
+//		return middleName;
+//	}
+//
+//	public void setMiddleName(String middleName) {
+//		this.middleName = middleName;
+//	}
+//
+//	public String getLastName() {
+//		return lastName;
+//	}
+//
+//	public void setLastName(String lastName) {
+//		this.lastName = lastName;
+//	}
+
+	public String[] getInterestField() {
+		return interestField;
 	}
 
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getMiddleName() {
-		return middleName;
-	}
-
-	public void setMiddleName(String middleName) {
-		this.middleName = middleName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setInterestField(String[] interestField) {
+		this.interestField = interestField;
 	}
 
 	public String getPhoneNo() {

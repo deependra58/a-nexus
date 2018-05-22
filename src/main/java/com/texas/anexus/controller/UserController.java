@@ -1,5 +1,6 @@
 package com.texas.anexus.controller;
 
+import java.util.EnumSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.texas.anexus.request.UserEditRequest;
 import com.texas.anexus.request.UserRegisterRequest;
 import com.texas.anexus.response.UserResponse;
+import com.texas.anexus.services.LoginService;
 import com.texas.anexus.services.UserService;
+import com.texas.anexus.util.InterestField;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -26,14 +29,14 @@ public class UserController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private LoginService loginService;
 
 	@ApiOperation(value = "Register user")
-	@RequestMapping(method = RequestMethod.POST)
-	public ResponseEntity<Object> registerUser(@RequestBody UserRegisterRequest userCreationRequest,
-			@RequestParam(required = false) String ruralMunicipality,
-			@RequestParam(required = false) String municipality, @RequestParam(required = false) String metropolitan,
-			@RequestParam(required = false) String subMetropolitan) {
-		userService.registerUser(userCreationRequest, ruralMunicipality, municipality, metropolitan, subMetropolitan);
+	@RequestMapping(value = "register", method = RequestMethod.POST)
+	public ResponseEntity<Object> registerUser(@RequestBody UserRegisterRequest userCreationRequest) {
+		userService.registerUser(userCreationRequest);
 		return new ResponseEntity<Object>("Registered Successfully", HttpStatus.OK);
 	}
 
@@ -44,12 +47,12 @@ public class UserController {
 		return new ResponseEntity<Object>(us, HttpStatus.OK);
 
 	}
-	
-	@ApiOperation(value="Get User by FirstName")
-	@RequestMapping(value="firstName/{firstName:.+}", method=RequestMethod.GET)
-	public ResponseEntity<Object> getUserByUsername(@PathVariable String firstName,@RequestHeader Long loginId){
-		List<UserResponse> ur=userService.getUserByUsername(firstName,loginId);
-		return new ResponseEntity<Object>(ur,HttpStatus.OK);
+
+	@ApiOperation(value = "Get User by FirstName")
+	@RequestMapping(value = "firstName/{firstName:.+}", method = RequestMethod.GET)
+	public ResponseEntity<Object> getUserByUsername(@PathVariable String firstName, @RequestHeader Long loginId) {
+		List<UserResponse> ur = userService.getUserByUsername(firstName, loginId);
+		return new ResponseEntity<Object>(ur, HttpStatus.OK);
 	}
 
 	@ApiOperation(value = "Get All users")
@@ -62,19 +65,37 @@ public class UserController {
 
 	@ApiOperation(value = "Edit user Info")
 	@RequestMapping(method = RequestMethod.PUT)
-	public ResponseEntity<Object> editUser(@RequestHeader Long id,@RequestBody UserEditRequest userEditRequest) {
+	public ResponseEntity<Object> editUser(@RequestHeader Long id, @RequestBody UserEditRequest userEditRequest) {
 
-		userService.editUser(id,userEditRequest);
+		userService.editUser(id, userEditRequest);
+		return new ResponseEntity<Object>("Edited Successfully", HttpStatus.OK);
+
+	}
+
+	@ApiOperation(value = "Delete the user")
+	@RequestMapping(method = RequestMethod.DELETE)
+	public ResponseEntity<Object> deleteUser(@RequestHeader Long id) {
+		userService.deleteUser(id);
 		return new ResponseEntity<Object>("Edited Successfully", HttpStatus.OK);
 
 	}
 	
-	@ApiOperation(value="Delete the user")
-	@RequestMapping(method=RequestMethod.DELETE)
-	public ResponseEntity<Object> deleteUser(@RequestHeader Long id){
-		userService.deleteUser(id);
-		return new ResponseEntity<Object>("Edited Successfully",HttpStatus.OK);
+	@ApiOperation(value="show the list of interestFields")
+	@RequestMapping(value="interestFields",method=RequestMethod.GET)
+	public ResponseEntity<Object> getAllInterestFields(){
 		
+		//List<InterestField> al = new ArrayList<InterestField>();
+		EnumSet<InterestField> allAnimals = EnumSet.allOf( InterestField.class );
+		System.out.println(allAnimals);
+		return new ResponseEntity<Object>(allAnimals,HttpStatus.OK);
 	}
+	
+	@ApiOperation(value = "Check token")
+	@RequestMapping(value = "checkToken", method = RequestMethod.POST)
+	public ResponseEntity<Object> checkToken(@RequestHeader String token) {
+		loginService.isValidToken(token);
+		return new ResponseEntity<Object>("Valid Token", HttpStatus.OK);
+	}
+
 
 }
