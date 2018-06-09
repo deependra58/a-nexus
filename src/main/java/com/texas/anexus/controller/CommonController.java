@@ -22,16 +22,6 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("rest/commons")
 public class CommonController {
 
-//	@ApiOperation(value="show the list of interestFields")
-//	@RequestMapping(method=RequestMethod.GET)
-//	public ResponseEntity<Object> getAllInterestFields(){
-//		
-//		//List<InterestField> al = new ArrayList<InterestField>();
-//		EnumSet<InterestField> allAnimals = EnumSet.allOf( InterestField.class );
-//		System.out.println(allAnimals);
-//		return new ResponseEntity<Object>(allAnimals,HttpStatus.OK);
-//	}
-
 	@Autowired
 	private UserService userService;
 
@@ -43,9 +33,8 @@ public class CommonController {
 
 	@ApiOperation(value = "Register user")
 	@RequestMapping(value = "additionalRegister", method = RequestMethod.POST)
-	public ResponseEntity<Object> registerUser(@RequestBody AdditionalRegisterCreationRequest addUserCreationRequest,
-			@RequestHeader Long loginId) {
-		userService.addRegisterUser(addUserCreationRequest, loginId);
+	public ResponseEntity<Object> registerUser(@RequestBody AdditionalRegisterCreationRequest addUserCreationRequest,@RequestHeader Long LoginId) {
+		userService.addRegisterUser(addUserCreationRequest,LoginId);
 		return new ResponseEntity<Object>("Registered Successfully", HttpStatus.OK);
 	}
 

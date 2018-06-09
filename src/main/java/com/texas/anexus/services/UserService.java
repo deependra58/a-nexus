@@ -58,7 +58,6 @@ public class UserService {
 		login.setLoginStatus(LoginStatus.LOGOUT);
 		login.setStatus(Status.ACTIVE);
 		login.setCreatedDate(new Date());
-//		loginRepository.save(login);
 
 		/* For storing address */
 		Address address = new Address();
@@ -66,23 +65,9 @@ public class UserService {
 		address.setState(userCreationRequest.getState());
 		address.setLocalLevel(userCreationRequest.getLocalLevel());
 
-//		address.setRuralMunicipality(ruralMunicipality);
-//		address.setMunicipality(municipality);
-//		address.setMetropolitan(metropolitan);
-//		address.setSubMetropolitan(subMetropolitan);
 		address.setStatus(Status.ACTIVE);
-//		addressRepository.save(address);
 
-		/* For creating user */
 		User user = new User();
-
-//		user.setFirstName(userCreationRequest.getFirstName());
-//		user.setMiddleName(userCreationRequest.getMiddleName());
-//		user.setLastName(userCreationRequest.getLastName());
-//		user.setPhoneNo(userCreationRequest.getPhoneNo());
-//		user.setInterestField(userCreationRequest.getInterestField());
-//		List<InterestFieldResponse> ifr=new ArrayList<InterestFieldResponse>();
-//		List<String> ir=userCreationRequest.getInterestField();
 
 		user.setEmail(userCreationRequest.getEmail());
 
@@ -110,19 +95,14 @@ public class UserService {
 		AddressResponse ar = new AddressResponse();
 		ar.setDistrict(address.getDistrict());
 		ar.setState(address.getState());
-//		ar.setMetropolitan(address.getMetropolitan());
-//		ar.setMunicipality(address.getMunicipality());
-//		ar.setRuralMunicipality(address.getRuralMunicipality());
-//		ar.setSubMetropolitan(address.getSubMetropolitan());
+
 		System.out.println(address.toString());
 		ur.setAddressResponse(ar);
 		ur.setEmail(user.getEmail());
 		ur.setId(user.getId());
+		ur.setInterestField(user.getInterestField());
 		ur.setProfilePicture(user.getProfilePicture());
-//		String firstName=user.getFirstName();
-//		String middelName=user.getMiddleName();
-//		String lastName=user.getLastName();
-//		String fullName=firstName.concat(" "+middelName.concat(" "+lastName));
+
 		ur.setFullName(user.getFullName());
 		ur.setPhoneNo(user.getPhoneNo());
 		return ur;
@@ -140,26 +120,15 @@ public class UserService {
 			AddressResponse ar = new AddressResponse();
 			ar.setDistrict(address.getDistrict());
 			ar.setState(address.getState());
-//			ar.setMetropolitan(address.getMetropolitan());
-//			ar.setMunicipality(address.getMunicipality());
-//			ar.setRuralMunicipality(address.getRuralMunicipality());
-//			ar.setSubMetropolitan(address.getSubMetropolitan());
+
 			System.out.println(address.toString());
+			ur.setInterestField(u.getInterestField());
 			ur.setAddressResponse(ar);
 			ur.setEmail(u.getEmail());
 			ur.setId(u.getId());
 			ur.setProfilePicture(u.getProfilePicture());
-			// ur.setInterestField(u.getInterestField());
-//			String firstName=u.getFirstName();
-//			String middelName=u.getMiddleName();
-//			if(middelName==null) {
-//				middelName="";
-//			}
-//			String lastName=u.getLastName();
-//			String fullName=firstName.concat(" "+middelName.concat(" "+lastName));
-//			System.out.println("----------------------------------------------"+fullName);
+
 			ur.setFullName(u.getFullName());
-			// ur.setFullName(u.getFullName());
 			ur.setPhoneNo(u.getPhoneNo());
 			userList.add(ur);
 		});
@@ -176,18 +145,11 @@ public class UserService {
 		Address address = addressRepository.findByIdAndStatusNot(user.getAddress().getId(), Status.DELETED);
 		address.setDistrict(userEditRequest.getAddressEditRequest().getDistrict());
 		address.setState(userEditRequest.getAddressEditRequest().getState());
-//		address.setRuralMunicipality(userEditRequest.getAddressEditRequest().getRuralMunicipality());
-//		address.setMunicipality(userEditRequest.getAddressEditRequest().getMunicipality());
-//		address.setMetropolitan(userEditRequest.getAddressEditRequest().getMetropolitan());
-//		address.setSubMetropolitan(userEditRequest.getAddressEditRequest().getSubMetropolitan());
+
 		address.setLocalLevel(userEditRequest.getAddressEditRequest().getLocalLevel());
-		address.setModifiedDate(new Date());
 		user.setAddress(address);
-		// user.setId(u.getId());
 		user.setEmail(userEditRequest.getEmail());
-//		user.setFirstName(userEditRequest.getFirstName());
-//		user.setMiddleName(userEditRequest.getMiddleName());
-//		user.setLastName(userEditRequest.getLastName());
+
 		user.setInterestField(userEditRequest.getInterestField());
 		user.setSkills(userEditRequest.getSkills());
 		user.setFullName(userEditRequest.getFullName());
@@ -214,26 +176,23 @@ public class UserService {
 			throw new ServiceException("Please Login first");
 		}
 		List<User> users = userRepository.findByFullNameAndStatusNot(firstName, Status.DELETED);
+		if (users.isEmpty()) {
+			throw new NotFoundException("user Not found with " + firstName);
+		}
 		users.stream().forEach(u -> {
 			UserResponse ur = new UserResponse();
 			ur.setId(u.getId());
-//			String firstNames=u.getFirstName();
-//			String middelName=u.getMiddleName();
-//			String lastName=u.getLastName();
-//			String fullName=firstNames.concat(" "+middelName.concat(" "+lastName));
+
 			ur.setFullName(u.getFullName());
 			ur.setEmail(u.getEmail());
 			ur.setPhoneNo(u.getPhoneNo());
+			ur.setInterestField(u.getInterestField());
 			Address address = addressRepository.findByIdAndStatusNot(u.getAddress().getId(), Status.DELETED);
 			AddressResponse ar = new AddressResponse();
 			ar.setDistrict(address.getDistrict());
 			ar.setState(address.getState());
 			ar.setLocalLevel(address.getLocalLevel());
-//			ar.setMetropolitan(address.getMetropolitan());
-//			ar.setMunicipality(address.getMunicipality());
-//			ar.setRuralMunicipality(address.getRuralMunicipality());
-//			ar.setSubMetropolitan(address.getSubMetropolitan());
-			ur.setAddressResponse(ar);
+
 			userResponseList.add(ur);
 		});
 		return userResponseList;
@@ -264,11 +223,11 @@ public class UserService {
 		try {
 
 			if (profilePicture != null && !profilePicture.isEmpty()) {
-				//System.out.println("----------------------From pp");
-				user.setProfilePicture(
-						new CloudinaryResource().uploadFile(FileUtil.write("test", profilePicture),
-								FileUtil.getFileLocation(loginId, UserRole.USER)));
-				String path="https://res.cloudinary.com/anexus/image/upload/v1526985354/".concat(user.getProfilePicture());
+				// System.out.println("----------------------From pp");
+				user.setProfilePicture(new CloudinaryResource().uploadFile(FileUtil.write("test", profilePicture),
+						FileUtil.getFileLocation(loginId, UserRole.USER)));
+				String path = "https://res.cloudinary.com/anexus/image/upload/v1526985354/"
+						.concat(user.getProfilePicture());
 				user.setProfilePicture(path);
 				userRepository.save(user);
 			}

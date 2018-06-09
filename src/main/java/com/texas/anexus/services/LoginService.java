@@ -58,9 +58,13 @@ public class LoginService {
 		} else {
 			throw new ServiceException("Incorrect Password!");
 		}
-		login.setDevviceId(loginDto.getDeviceId());
-		LoginToken loginToken = new LoginToken();
-		loginToken.setLoginId(login.getId());
+		//login.setDevviceId(loginDto.getDeviceId());
+		LoginToken loginToken = loginTokenRepository.findByLoginIdAndStatusNot(login.getId(),Status.ACTIVE);
+		if(loginToken==null) {
+			loginToken=new LoginToken();
+			loginToken.setLoginId(login.getId());
+		}
+		
 		loginToken.setToken(RandomUtils.randomString(50));
 		loginToken.setTokenExpirationDateTime(DateUtils.currentDateTimePlusMinutes(tokenExpireAfter));
 		loginToken.setStatus(Status.ACTIVE);
@@ -83,6 +87,9 @@ public class LoginService {
 			throw new ServiceException("You are logged out");
 		}
 		login.setLoginStatus(LoginStatus.LOGOUT);
+		LoginToken lt=loginTokenRepository.findByLoginIdAndStatusNot(login.getId(),Status.DELETED);
+		lt.setStatus(Status.DELETED);
+		loginTokenRepository.save(lt);
 		loginRepository.save(login);
 
 	}

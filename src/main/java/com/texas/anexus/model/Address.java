@@ -1,11 +1,19 @@
 package com.texas.anexus.model;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.OneToMany;
+
+import com.texas.anexus.util.Status;
 
 /*
  * <<This is the entity for address>>
@@ -15,33 +23,28 @@ import javax.persistence.OneToMany;
  * */
 @SuppressWarnings("serial")
 @Entity
-public class Address extends AbstractEntity {
+public class Address implements Serializable {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+
+	private Long id;
 	private String state;
 	private String district;
 	private String localLevel;
-//	private String ruralMunicipality;
-//	private String municipality;
-//	private String subMetropolitan;
-//	private String metropolitan;
+
+	@Enumerated(EnumType.STRING)
+	private Status status;
 
 	@OneToMany(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<User> user;
 
-	public String getLocalLevel() {
-		return localLevel;
+	public Long getId() {
+		return id;
 	}
 
-	public void setLocalLevel(String localLevel) {
-		this.localLevel = localLevel;
-	}
-
-	public List<User> getUser() {
-		return user;
-	}
-
-	public void setUser(List<User> user) {
-		this.user = user;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getState() {
@@ -60,43 +63,30 @@ public class Address extends AbstractEntity {
 		this.district = district;
 	}
 
-//	public String getRuralMunicipality() {
-//		return ruralMunicipality;
-//	}
-//
-//	public void setRuralMunicipality(String ruralMunicipality) {
-//		this.ruralMunicipality = ruralMunicipality;
-//	}
-//
-//	public String getMunicipality() {
-//		return municipality;
-//	}
-//
-//	public void setMunicipality(String municipality) {
-//		this.municipality = municipality;
-//	}
-//
-//	public String getSubMetropolitan() {
-//		return subMetropolitan;
-//	}
-//
-//	public void setSubMetropolitan(String subMetropolitan) {
-//		this.subMetropolitan = subMetropolitan;
-//	}
-//
-//	public String getMetropolitan() {
-//		return metropolitan;
-//	}
-//
-//	public void setMetropolitan(String metropolitan) {
-//		this.metropolitan = metropolitan;
-//	}
+	public String getLocalLevel() {
+		return localLevel;
+	}
 
-//	@Override
-//	public String toString() {
-//		return "Address [state=" + state + ", district=" + district + ", ruralMunicipality=" + ruralMunicipality
-//				+ ", municipality=" + municipality + ", subMetropolitan=" + subMetropolitan + ", metropolitan="
-//				+ metropolitan + ", user=" + user + "]";
-//	}
+	public void setLocalLevel(String localLevel) {
+		this.localLevel = localLevel;
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+
+	public List<User> getUser() {
+		return user;
+	}
+
+	public void setUser(List<User> user) {
+		this.user = user;
+	}
+	
+	
 
 }

@@ -44,11 +44,12 @@ public class ScheduleService {
 		if(user==null) {
 			throw new NotFoundException("User not found with given login ID");
 		}
-		schedule.setDay(scheduleCreationRequest.getDay());
-		schedule.setHrs(scheduleCreationRequest.getHrs());
-		schedule.setMin(scheduleCreationRequest.getMin());
-		schedule.setMonth(scheduleCreationRequest.getMonth());
-		schedule.setYear(scheduleCreationRequest.getYear());
+//		schedule.setDay(scheduleCreationRequest.getDay());
+//		schedule.setHrs(scheduleCreationRequest.getHrs());
+//		schedule.setMin(scheduleCreationRequest.getMin());
+//		schedule.setMonth(scheduleCreationRequest.getMonth());
+//		schedule.setYear(scheduleCreationRequest.getYear());
+		schedule.setDate(scheduleCreationRequest.getDate());
 		schedule.setCreatedDate(new Date());
 		schedule.setScheduleType(scheduleCreationRequest.getScheduleType());
 		schedule.setStatus(Status.ACTIVE);
@@ -71,12 +72,13 @@ public class ScheduleService {
 			List<Schedule> sc=scheduleRepository.findAllByStatusNot(Status.DELETED);
 			sc.stream().forEachOrdered(u->{
 				ScheduleResponse sr=new ScheduleResponse();
-				sr.setDay(u.getDay());
-				sr.setHrs(u.getHrs());
-				sr.setMin(u.getMin());
-				sr.setMonth(u.getMonth());
+//				sr.setDay(u.getDay());
+//				sr.setHrs(u.getHrs());
+//				sr.setMin(u.getMin());
+//				sr.setMonth(u.getMonth());
 				sr.setTask(u.getTask());
-				sr.setYear(u.getYear());
+//				sr.setYear(u.getYear());
+				sr.setDate(u.getDate());
 				scheduleResponseList.add(sr);
 				
 			});
@@ -87,13 +89,15 @@ public class ScheduleService {
 			List<Schedule> sc=scheduleRepository.findAllByStatusNotAndScheduleTypeNot(Status.DELETED,ScheduleType.PRIVATE);
 			sc.stream().forEachOrdered(u->{
 				ScheduleResponse sr=new ScheduleResponse();
-				sr.setDay(u.getDay());
-				sr.setHrs(u.getHrs());
-				sr.setMin(u.getMin());
-				sr.setMonth(u.getMonth());
+//				sr.setDay(u.getDay());
+//				sr.setHrs(u.getHrs());
+//				sr.setMin(u.getMin());
+//				sr.setMonth(u.getMonth());
+				sr.setDate(u.getDate());
 				sr.setTask(u.getTask());
-				sr.setYear(u.getYear());
+				//sr.setYear(u.getYear());
 				scheduleResponseList.add(sr);
+				
 				
 			});
 			return scheduleResponseList;

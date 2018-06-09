@@ -91,7 +91,7 @@ public class UserController {
 	}
 	
 	@ApiOperation(value = "Check token")
-	@RequestMapping(value = "checkToken", method = RequestMethod.POST)
+	@RequestMapping(value = "checkToken", method = RequestMethod.GET)
 	public ResponseEntity<Object> checkToken(@RequestHeader String token) {
 		loginService.isValidToken(token);
 		return new ResponseEntity<Object>("Valid Token", HttpStatus.OK);
