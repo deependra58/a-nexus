@@ -14,8 +14,11 @@ public interface LoginTokenRepository extends JpaRepository<LoginToken, Long> {
 
 	LoginToken findByToken(String token);
 
+	LoginToken findByLoginId(Long id);
 	LoginToken findByLoginIdAndStatusNot(Long id, Status deleted);
 
 }
+
+
 
 

@@ -21,7 +21,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("rest/v1/schedules")
+@RequestMapping("api/v1/schedules")
 public class ScheduleController {
 	
 	@Autowired

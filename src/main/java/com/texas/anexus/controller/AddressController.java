@@ -47,7 +47,7 @@ import io.swagger.annotations.ApiOperation;
  * <<Here is the list of API to post state, district, rural municipality, municipality, metropolitan, subMetropolitan>>*/
 
 @RestController
-@RequestMapping("rest/address")
+@RequestMapping("api/v1/addresses")
 public class AddressController {
 
 	@Autowired

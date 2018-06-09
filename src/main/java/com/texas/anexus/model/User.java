@@ -31,7 +31,8 @@ public class User extends AbstractEntity {
 	private GenderType gender;
 	private String[] skills;
 	private String[] interestField;
-	
+	private Long followers;
+	private Long following;
 
 	@OneToOne
 	private Login login;
@@ -48,43 +49,26 @@ public class User extends AbstractEntity {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "address_id")
 	private Address address;
+	
+	@OneToMany(mappedBy="user", cascade=CascadeType.ALL,fetch=FetchType.LAZY)
+	private List<Follower> follower;
+	
+	
+	public User(Long id) {
+		this.id=id;
+	}
 
-	
+	public User() {
+		// TODO Auto-generated constructor stub
+	}
 
-//	public String getFirstName() {
-//		return firstName;
-//	}
-//
-//	public void setFirstName(String firstName) {
-//		this.firstName = firstName;
-//	}
-//
-//	public String getMiddleName() {
-//		return middleName;
-//	}
-//
-//	public void setMiddleName(String middleName) {
-//		this.middleName = middleName;
-//	}
-//
-//	public String getLastName() {
-//		return lastName;
-//	}
-//
-//	public void setLastName(String lastName) {
-//		this.lastName = lastName;
-//	}
+	public Long getFollowers() {
+		return followers;
+	}
 
-	
-	
-//	public String[] getInterestField() {
-//		return interestField;
-//	}
-//
-//	public void setInterestField(String[] interestField) {
-//		this.interestField = interestField;
-//	}
-	
+	public void setFollowers(Long followers) {
+		this.followers = followers;
+	}
 
 	public String getPhoneNo() {
 		return phoneNo;
@@ -141,7 +125,6 @@ public class User extends AbstractEntity {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
 
 	public String getProfilePicture() {
 		return profilePicture;
@@ -199,6 +182,21 @@ public class User extends AbstractEntity {
 		this.skills = skills;
 	}
 
+	public Long getFollowing() {
+		return following;
+	}
+
+	public void setFollowing(Long following) {
+		this.following = following;
+	}
+
+	public List<Follower> getFollower() {
+		return follower;
+	}
+
+	public void setFollower(List<Follower> follower) {
+		this.follower = follower;
+	}
 	
 
 }

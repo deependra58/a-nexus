@@ -24,7 +24,7 @@ import com.texas.anexus.util.InterestField;
 import io.swagger.annotations.ApiOperation;
 
 @RestController
-@RequestMapping("rest/users")
+@RequestMapping("api/v1/users")
 public class UserController {
 
 	@Autowired
@@ -85,17 +85,12 @@ public class UserController {
 	public ResponseEntity<Object> getAllInterestFields(){
 		
 		//List<InterestField> al = new ArrayList<InterestField>();
-		EnumSet<InterestField> allAnimals = EnumSet.allOf( InterestField.class );
-		System.out.println(allAnimals);
-		return new ResponseEntity<Object>(allAnimals,HttpStatus.OK);
+		EnumSet<InterestField> interestFields = EnumSet.allOf( InterestField.class );
+		System.out.println(interestFields);
+		return new ResponseEntity<Object>(interestFields,HttpStatus.OK);
 	}
 	
-	@ApiOperation(value = "Check token")
-	@RequestMapping(value = "checkToken", method = RequestMethod.GET)
-	public ResponseEntity<Object> checkToken(@RequestHeader String token) {
-		loginService.isValidToken(token);
-		return new ResponseEntity<Object>("Valid Token", HttpStatus.OK);
-	}
+	
 
 
 }

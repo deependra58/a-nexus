@@ -78,7 +78,7 @@ public class SwaggerConfig extends WebMvcConfigurerAdapter {
 	private ApiInfo metaInfo() {
 
 		ApiInfo apiInfo = new ApiInfo(" A-Nexus", "", "", "",
-				new Contact("", "", "karkideependra58@gmail.com, yubarajoli77@gmail.com"), "", "");
+				new Contact("", "", "karkideependra58@gmail.com, yubarajoli77@gmail.com,milanthapa704@gmail.com"), "", "");
 
 		return apiInfo;
 	}

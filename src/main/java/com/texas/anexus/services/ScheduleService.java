@@ -1,5 +1,6 @@
 package com.texas.anexus.services;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.texas.anexus.cloud.CloudinaryResource;
 import com.texas.anexus.exceptions.NotFoundException;
 import com.texas.anexus.model.Login;
 import com.texas.anexus.model.Schedule;
@@ -19,9 +21,11 @@ import com.texas.anexus.repository.ScheduleRepository;
 import com.texas.anexus.repository.UserRepository;
 import com.texas.anexus.request.ScheduleCreationRequest;
 import com.texas.anexus.response.ScheduleResponse;
+import com.texas.anexus.util.FileUtil;
 import com.texas.anexus.util.LoginStatus;
 import com.texas.anexus.util.ScheduleType;
 import com.texas.anexus.util.Status;
+import com.texas.anexus.util.UserRole;
 
 
 @Service
@@ -36,6 +40,7 @@ public class ScheduleService {
 	@Autowired
 	private LoginRepository loginRepository;
 	
+	@SuppressWarnings("unused")
 	@Transactional
 	public void postSchedule(ScheduleCreationRequest scheduleCreationRequest, Long loginId) {
 		Schedule schedule=new Schedule();
@@ -44,11 +49,29 @@ public class ScheduleService {
 		if(user==null) {
 			throw new NotFoundException("User not found with given login ID");
 		}
-//		schedule.setDay(scheduleCreationRequest.getDay());
-//		schedule.setHrs(scheduleCreationRequest.getHrs());
-//		schedule.setMin(scheduleCreationRequest.getMin());
-//		schedule.setMonth(scheduleCreationRequest.getMonth());
-//		schedule.setYear(scheduleCreationRequest.getYear());
+		File file = null;
+		if(scheduleCreationRequest.getScheduleType()!=null) {
+			
+			System.out.println("Hello from pp");
+			try {
+
+				if (scheduleCreationRequest.getScheduleImage() != null && !scheduleCreationRequest.getScheduleImage().isEmpty()) {
+					// System.out.println("----------------------From pp");
+					schedule.setScheduleImage(new CloudinaryResource().uploadFile(FileUtil.write("test", scheduleCreationRequest.getScheduleImage()),
+							FileUtil.getFileLocation(loginId, UserRole.USER)));
+					String path = "https://res.cloudinary.com/anexus/image/upload/v1526985354/"
+							.concat(schedule.getScheduleImage());
+					schedule.setScheduleImage(path);
+					
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				if (file != null) {
+					file.delete();
+				}
+			}
+		}
 		schedule.setDate(scheduleCreationRequest.getDate());
 		schedule.setCreatedDate(new Date());
 		schedule.setScheduleType(scheduleCreationRequest.getScheduleType());

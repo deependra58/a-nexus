@@ -1,5 +1,6 @@
 package com.texas.anexus.services;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,6 +53,7 @@ public class LoginService {
 			throw new NotFoundException("User with username " + loginDto.getUsername() + " not found!");
 		}
 
+		
 		if (BCrypt.checkpw(loginDto.getPassword(), login.getPassword())) {
 			login.setLoginStatus(LoginStatus.LOGGEDIN);
 			loginRepository.save(login);
@@ -59,7 +61,7 @@ public class LoginService {
 			throw new ServiceException("Incorrect Password!");
 		}
 		//login.setDevviceId(loginDto.getDeviceId());
-		LoginToken loginToken = loginTokenRepository.findByLoginIdAndStatusNot(login.getId(),Status.ACTIVE);
+		LoginToken loginToken = loginTokenRepository.findByLoginId(login.getId());
 		if(loginToken==null) {
 			loginToken=new LoginToken();
 			loginToken.setLoginId(login.getId());
@@ -68,6 +70,7 @@ public class LoginService {
 		loginToken.setToken(RandomUtils.randomString(50));
 		loginToken.setTokenExpirationDateTime(DateUtils.currentDateTimePlusMinutes(tokenExpireAfter));
 		loginToken.setStatus(Status.ACTIVE);
+		loginToken.setCreatedDate(new Date());
 		loginToken = loginTokenRepository.save(loginToken);
 		Map<Object, Object> response = new HashMap<>();
 		response.put("username", login.getUsername());

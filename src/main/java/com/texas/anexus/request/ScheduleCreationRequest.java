@@ -17,6 +17,7 @@ public class ScheduleCreationRequest {
 //	private Long min;
 	@NotNull(message="Date cannot be null")
 	private Date date;
+	private String scheduleImage;
 	private ScheduleType scheduleType;
 	public String getTask() {
 		return task;
@@ -24,7 +25,14 @@ public class ScheduleCreationRequest {
 	public void setTask(String task) {
 		this.task = task;
 	}
-//	public Long getYear() {
+	
+public String getScheduleImage() {
+		return scheduleImage;
+	}
+	public void setScheduleImage(String scheduleImage) {
+		this.scheduleImage = scheduleImage;
+	}
+	//	public Long getYear() {
 //		return year;
 //	}
 //	public void setYear(Long year) {

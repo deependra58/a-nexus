@@ -15,15 +15,18 @@ import com.texas.anexus.cloud.CloudinaryResource;
 import com.texas.anexus.exceptions.AlreadyExistException;
 import com.texas.anexus.exceptions.NotFoundException;
 import com.texas.anexus.model.Address;
+import com.texas.anexus.model.Follower;
 import com.texas.anexus.model.Login;
 import com.texas.anexus.model.User;
 import com.texas.anexus.repository.AddressRepository;
+import com.texas.anexus.repository.FollowerRepository;
 import com.texas.anexus.repository.LoginRepository;
 import com.texas.anexus.repository.UserRepository;
 import com.texas.anexus.request.AdditionalRegisterCreationRequest;
 import com.texas.anexus.request.UserEditRequest;
 import com.texas.anexus.request.UserRegisterRequest;
 import com.texas.anexus.response.AddressResponse;
+import com.texas.anexus.response.SkillResponse;
 import com.texas.anexus.response.UserResponse;
 import com.texas.anexus.util.BCrypt;
 import com.texas.anexus.util.FileUtil;
@@ -42,6 +45,9 @@ public class UserService {
 
 	@Autowired
 	private LoginRepository loginRepository;
+	
+	@Autowired
+	private FollowerRepository followerRepository;
 
 	@Transactional
 	public void registerUser(UserRegisterRequest userCreationRequest) {
@@ -74,6 +80,9 @@ public class UserService {
 		loginRepository.save(login);
 		addressRepository.save(address);
 		user.setLogin(login);
+		user.setFollowers((long) 0);
+		user.setFollowing((long) 0);
+		
 		user.setGender(userCreationRequest.getGender());
 		user.setFullName(userCreationRequest.getFullName());
 		user.setAddress(address);
@@ -91,20 +100,26 @@ public class UserService {
 			throw new NotFoundException("User with id:" + id + " not found!");
 		}
 		UserResponse ur = new UserResponse();
+		List<SkillResponse> sr=new ArrayList<SkillResponse>();
 		Address address = addressRepository.findByIdAndStatusNot(user.getAddress().getId(), Status.DELETED);
 		AddressResponse ar = new AddressResponse();
 		ar.setDistrict(address.getDistrict());
 		ar.setState(address.getState());
-
 		System.out.println(address.toString());
 		ur.setAddressResponse(ar);
 		ur.setEmail(user.getEmail());
 		ur.setId(user.getId());
 		ur.setInterestField(user.getInterestField());
+		ur.setSkills(user.getSkills());
+		//String[] st=user.getSkills();
+		
+		//System.out.println("------------"+user.getSkills());
 		ur.setProfilePicture(user.getProfilePicture());
-
+		ur.setFollowers(user.getFollowers());
+		ur.setFollowing(user.getFollowing());
 		ur.setFullName(user.getFullName());
 		ur.setPhoneNo(user.getPhoneNo());
+		
 		return ur;
 
 	}
@@ -127,7 +142,8 @@ public class UserService {
 			ur.setEmail(u.getEmail());
 			ur.setId(u.getId());
 			ur.setProfilePicture(u.getProfilePicture());
-
+			ur.setFollowers(u.getFollowers());
+			ur.setFollowing(u.getFollowing());
 			ur.setFullName(u.getFullName());
 			ur.setPhoneNo(u.getPhoneNo());
 			userList.add(ur);
@@ -238,6 +254,35 @@ public class UserService {
 				file.delete();
 			}
 		}
+	}
+
+	@Transactional
+	public User followingUser(Long loginId, Long followId) {
+		Login loginFollowing = loginRepository.findByIdAndLoginStatusNot(loginId, LoginStatus.LOGOUT);
+		if (loginFollowing == null) {
+			throw new ServiceException("You are not logged in. Please login");
+		}
+		Login loginToFollow=loginRepository.findByIdAndStatusNot(followId, Status.DELETED);
+		User userFollowing = userRepository.findByLoginAndStatusNot(loginFollowing, Status.DELETED);
+		User userFollowed=userRepository.findByLoginAndStatusNot(loginToFollow,Status.DELETED);
+		if(userFollowing==userFollowed) {
+			throw new ServiceException("user cannot follow him/herself");
+		}
+		Follower follower=followerRepository.findByUserAndFollowingIdAndStatusNot(new User(userFollowing.getId()),userFollowed.getId(),Status.DELETED);
+		if(follower!=null)
+			throw new ServiceException("user already followed");
+		follower=new Follower();
+		follower.setCreatedDate(new Date());
+		follower.setUser(userFollowing);
+		follower.setFollowingId(userFollowed.getId());
+		follower.setStatus(Status.ACTIVE);
+		userFollowing.setFollowing(userFollowing.getFollowing()+1);
+		userFollowed.setFollowers(userFollowed.getFollowers()+1);
+		userRepository.save(userFollowed);
+		userRepository.save(userFollowing);
+		followerRepository.save(follower);
+		
+		return userFollowed;
 	}
 
 }

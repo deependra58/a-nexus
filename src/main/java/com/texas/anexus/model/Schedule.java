@@ -26,7 +26,7 @@ public class Schedule extends AbstractEntity {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "userId")
 	private User user;
-
+	private String scheduleImage;
 	@Enumerated(EnumType.STRING)
 	private ScheduleType scheduleType;
 
@@ -61,6 +61,15 @@ public class Schedule extends AbstractEntity {
 	public void setDate(Date date) {
 		this.date = date;
 	}
+
+	public String getScheduleImage() {
+		return scheduleImage;
+	}
+
+	public void setScheduleImage(String scheduleImage) {
+		this.scheduleImage = scheduleImage;
+	}
+	
 	
 
 }

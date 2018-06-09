@@ -84,10 +84,11 @@ public class AnexusFilter implements Filter {
 		String url = ((HttpServletRequest) req).getRequestURL().toString();
 		LOG.debug("Accepted request: {}", url);
 		System.out.println("Accepted request from}" + url);
+		
 		if (check) {
 			LOG.debug("Validating token.");
 			System.out.println("here1");
-			if (url.contains("/rest")) {
+			if (url.contains("/api/v1")) {
 				System.out.println("here2");
 				if (!url.contains(Constant.LOGIN_API_V1) && !url.contains(Constant.LOGOUT_API_V1)&&!url.contains(Constant.USER_API_V1)&&!url.contains(Constant.ADDRESS_API_V1)
 						&& !url.contains(Constant.STATUS_API) && !loginService.isValidToken(currentUserId, token)) {

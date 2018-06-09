@@ -18,7 +18,7 @@ import com.texas.anexus.services.LoginService;
 
 
 @RestController
-@RequestMapping("rest/logins")
+@RequestMapping("api/v1/logins")
 public class LoginController {
 
 	@Autowired
