@@ -105,6 +105,7 @@ public class UserService {
 		AddressResponse ar = new AddressResponse();
 		ar.setDistrict(address.getDistrict());
 		ar.setState(address.getState());
+		ar.setLocalLevel(address.getLocalLevel());
 		System.out.println(address.toString());
 		ur.setAddressResponse(ar);
 		ur.setEmail(user.getEmail());
