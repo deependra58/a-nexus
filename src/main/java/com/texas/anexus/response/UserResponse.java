@@ -14,6 +14,17 @@ public class UserResponse {
 	private String[] skills;
 	private Long followers;
 	private Long following;
+	private String username;
+	
+	
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 	public Long getFollowers() {
 		return followers;

@@ -16,8 +16,10 @@ import org.springframework.stereotype.Service;
 import com.texas.anexus.exceptions.NotFoundException;
 import com.texas.anexus.model.Login;
 import com.texas.anexus.model.LoginToken;
+import com.texas.anexus.model.User;
 import com.texas.anexus.repository.LoginRepository;
 import com.texas.anexus.repository.LoginTokenRepository;
+import com.texas.anexus.repository.UserRepository;
 import com.texas.anexus.request.LoginCreationRequest;
 import com.texas.anexus.util.BCrypt;
 import com.texas.anexus.util.Constant;
@@ -45,6 +47,9 @@ public class LoginService {
 
 	@Autowired
 	private LoginRepository loginRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	@Transactional
 	public Map<Object, Object> login(LoginCreationRequest loginDto) {
@@ -72,10 +77,12 @@ public class LoginService {
 		loginToken.setStatus(Status.ACTIVE);
 		loginToken.setCreatedDate(new Date());
 		loginToken = loginTokenRepository.save(loginToken);
+		User user=userRepository.findByIdAndStatusNot(login.getId(), Status.DELETED);
 		Map<Object, Object> response = new HashMap<>();
 		response.put("username", login.getUsername());
 		response.put("id", login.getId());
 		response.put("token", loginToken.getToken());
+		response.put("profile pic",user.getProfilePicture());
 		return response;
 
 	}
