@@ -13,6 +13,7 @@ public class Constant {
 	public static final String EMAIL_AND_PASSWORD_MISMATCH = "Email and password mismatch!";
 	public static final String LOGIN_API_V1 = "/api/v1/logins";
 	public static final String ADDRESS_API_V1="/api/v1/addresses";
+	public static final String TOKENCHECK_API_V1= "/api/v1/tokenCheck/checkToken";
 	public static final String USER_API_V1 = "/api/v1/users";
 	public static final String LOGOUT_API_V1 = "/api/v1/logout";
 	public static final String SWAGGER_URL = "/swagger-ui.html";
@@ -21,4 +22,5 @@ public class Constant {
 	public static final String DISABLE = "DISABLE";
 	public static final String NEW = "New";
 	public static final String EMPTY_STRING = "";
+	
 }

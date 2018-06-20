@@ -90,7 +90,7 @@ public class AnexusFilter implements Filter {
 			System.out.println("here1");
 			if (url.contains("/api/v1")) {
 				System.out.println("here2");
-				if (!url.contains(Constant.LOGIN_API_V1) && !url.contains(Constant.LOGOUT_API_V1)&&!url.contains(Constant.USER_API_V1)&&!url.contains(Constant.ADDRESS_API_V1)
+				if (!url.contains(Constant.LOGIN_API_V1) && !url.contains(Constant.LOGOUT_API_V1)&&!url.contains(Constant.USER_API_V1)&&!url.contains(Constant.ADDRESS_API_V1)&&!url.contains(Constant.TOKENCHECK_API_V1)
 						&& !url.contains(Constant.STATUS_API) && !loginService.isValidToken(currentUserId, token)) {
 					System.out.println("here3");
 					response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
