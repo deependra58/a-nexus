@@ -32,27 +32,27 @@ public class CommonController {
 	
 	/*API for additional Registration*/
 
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "token", required = true, dataType = "string", paramType = "header") })
+//	@ApiImplicitParams({
+//			@ApiImplicitParam(name = "token", required = true, dataType = "string", paramType = "header") })
+//
+//	@ApiOperation(value = "Register user")
+//	@RequestMapping(value = "additionalRegister", method = RequestMethod.POST)
+//	public ResponseEntity<Object> registerUser(@RequestBody AdditionalRegisterCreationRequest addUserCreationRequest,@RequestHeader Long LoginId) {
+//		userService.addRegisterUser(addUserCreationRequest,LoginId);
+//		return new ResponseEntity<Object>("Registered Successfully", HttpStatus.OK);
+//	}
 
-	@ApiOperation(value = "Register user")
-	@RequestMapping(value = "additionalRegister", method = RequestMethod.POST)
-	public ResponseEntity<Object> registerUser(@RequestBody AdditionalRegisterCreationRequest addUserCreationRequest,@RequestHeader Long LoginId) {
-		userService.addRegisterUser(addUserCreationRequest,LoginId);
-		return new ResponseEntity<Object>("Registered Successfully", HttpStatus.OK);
-	}
-
-	/*API for uploading user profile picture*/
-	@ApiImplicitParams({
-			@ApiImplicitParam(name = "token", required = true, dataType = "string", paramType = "header") })
-
-	@ApiOperation(value = "Upload profile picture")
-	@RequestMapping(value = "uploadPic", method = RequestMethod.POST)
-	public ResponseEntity<Object> uploadImage(@RequestParam String profilePicture, @RequestHeader Long loginId) {
-		userService.uploadProfilePicture(profilePicture, loginId);
-		return new ResponseEntity<Object>("Profile Picture Updated Successfully", HttpStatus.OK);
-
-	}
+//	/*API for uploading user profile picture*/
+//	@ApiImplicitParams({
+//			@ApiImplicitParam(name = "token", required = true, dataType = "string", paramType = "header") })
+//
+//	@ApiOperation(value = "Upload profile picture")
+//	@RequestMapping(value = "uploadPic", method = RequestMethod.POST)
+//	public ResponseEntity<Object> uploadImage(@RequestParam String profilePicture, @RequestHeader Long loginId) {
+//		userService.uploadProfilePicture(profilePicture, loginId);
+//		return new ResponseEntity<Object>("Profile Picture Updated Successfully", HttpStatus.OK);
+//
+//	}
 	
 	
 	@ApiImplicitParams({
