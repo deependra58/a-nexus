@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.texas.anexus.exceptions.NotFoundException;
 import com.texas.anexus.model.Login;
 import com.texas.anexus.model.LoginToken;
+<<<<<<< HEAD
 import com.texas.anexus.model.TokenGenerator;
 import com.texas.anexus.model.User;
 import com.texas.anexus.model.Verification;
@@ -25,6 +26,12 @@ import com.texas.anexus.repository.LoginTokenRepository;
 import com.texas.anexus.repository.UserRepository;
 import com.texas.anexus.repository.VerificationRepository;
 import com.texas.anexus.request.ForgetPasswordRequest;
+=======
+import com.texas.anexus.model.User;
+import com.texas.anexus.repository.LoginRepository;
+import com.texas.anexus.repository.LoginTokenRepository;
+import com.texas.anexus.repository.UserRepository;
+>>>>>>> d10a1c2b7852a1795133c34705c7f01e380d4705
 import com.texas.anexus.request.LoginCreationRequest;
 import com.texas.anexus.util.BCrypt;
 import com.texas.anexus.util.Constant;
@@ -55,6 +62,9 @@ public class LoginService {
 
 	@Autowired
 	private LoginRepository loginRepository;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -87,12 +97,20 @@ public class LoginService {
 		loginToken.setStatus(Status.ACTIVE);
 		loginToken.setCreatedDate(new Date());
 		loginToken = loginTokenRepository.save(loginToken);
+<<<<<<< HEAD
 		User user = userRepository.findByIdAndStatusNot(login.getId(), Status.DELETED);
+=======
+		User user=userRepository.findByIdAndStatusNot(login.getId(), Status.DELETED);
+>>>>>>> d10a1c2b7852a1795133c34705c7f01e380d4705
 		Map<Object, Object> response = new HashMap<>();
 		response.put("username", login.getUsername());
 		response.put("id", login.getId());
 		response.put("token", loginToken.getToken());
+<<<<<<< HEAD
 		response.put("profile pic", user.getProfilePicture());
+=======
+		response.put("profile pic",user.getProfilePicture());
+>>>>>>> d10a1c2b7852a1795133c34705c7f01e380d4705
 		return response;
 
 	}

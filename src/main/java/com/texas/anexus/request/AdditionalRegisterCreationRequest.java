@@ -1,7 +1,10 @@
 package com.texas.anexus.request;
 
+<<<<<<< HEAD
 import java.util.Arrays;
 
+=======
+>>>>>>> d10a1c2b7852a1795133c34705c7f01e380d4705
 import javax.validation.constraints.NotNull;
 
 public class AdditionalRegisterCreationRequest {

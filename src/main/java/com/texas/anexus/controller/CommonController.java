@@ -32,6 +32,7 @@ public class CommonController {
 	
 	/*API for additional Registration*/
 
+<<<<<<< HEAD
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "token", required = true, dataType = "string", paramType = "header") })
 
@@ -54,6 +55,29 @@ public class CommonController {
 		return new ResponseEntity<Object>("Profile Picture Updated Successfully", HttpStatus.OK);
 
 	}
+=======
+//	@ApiImplicitParams({
+//			@ApiImplicitParam(name = "token", required = true, dataType = "string", paramType = "header") })
+//
+//	@ApiOperation(value = "Register user")
+//	@RequestMapping(value = "additionalRegister", method = RequestMethod.POST)
+//	public ResponseEntity<Object> registerUser(@RequestBody AdditionalRegisterCreationRequest addUserCreationRequest,@RequestHeader Long LoginId) {
+//		userService.addRegisterUser(addUserCreationRequest,LoginId);
+//		return new ResponseEntity<Object>("Registered Successfully", HttpStatus.OK);
+//	}
+
+//	/*API for uploading user profile picture*/
+//	@ApiImplicitParams({
+//			@ApiImplicitParam(name = "token", required = true, dataType = "string", paramType = "header") })
+//
+//	@ApiOperation(value = "Upload profile picture")
+//	@RequestMapping(value = "uploadPic", method = RequestMethod.POST)
+//	public ResponseEntity<Object> uploadImage(@RequestParam String profilePicture, @RequestHeader Long loginId) {
+//		userService.uploadProfilePicture(profilePicture, loginId);
+//		return new ResponseEntity<Object>("Profile Picture Updated Successfully", HttpStatus.OK);
+//
+//	}
+>>>>>>> d10a1c2b7852a1795133c34705c7f01e380d4705
 	
 	
 	@ApiImplicitParams({
