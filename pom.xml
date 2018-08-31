@@ -68,11 +68,10 @@
 			<version>1.18.0</version>
 		</dependency>
 
-<<<<<<< HEAD
-=======
+
 
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
->>>>>>> d10a1c2b7852a1795133c34705c7f01e380d4705
+
 
 		<!-- For password reset through email -->
 		<dependency>
