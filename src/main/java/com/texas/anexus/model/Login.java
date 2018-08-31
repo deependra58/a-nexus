@@ -6,11 +6,13 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import com.texas.anexus.util.LoginStatus;
 
 @SuppressWarnings("serial")
 @Entity
+@Table(name="login")
 public class Login  extends AbstractEntity{
 	
 	private String username;

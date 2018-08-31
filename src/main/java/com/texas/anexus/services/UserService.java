@@ -53,8 +53,7 @@ public class UserService {
 	public User registerUser(UserRegisterRequest userCreationRequest) {
 
 		/* For Login */
-		Login login = loginRepository.findByUsernameAndStatusNot(
-				userCreationRequest.getUsername(), Status.DELETED);
+		Login login = loginRepository.findByUsernameAndStatusNot(userCreationRequest.getUsername(), Status.DELETED);
 		if (login != null) {
 			throw new AlreadyExistException("Username already Exist!");
 		}
@@ -103,8 +102,7 @@ public class UserService {
 		}
 		UserResponse ur = new UserResponse();
 		List<SkillResponse> sr = new ArrayList<SkillResponse>();
-		Address address = addressRepository
-				.findByIdAndStatusNot(user.getAddress().getId(), Status.DELETED);
+		Address address = addressRepository.findByIdAndStatusNot(user.getAddress().getId(), Status.DELETED);
 		AddressResponse ar = new AddressResponse();
 		ar.setDistrict(address.getDistrict());
 		ar.setState(address.getState());
@@ -135,8 +133,7 @@ public class UserService {
 		List<User> user = userRepository.findAllByStatusNot(Status.DELETED);
 		user.stream().forEach(u -> {
 			UserResponse ur = new UserResponse();
-			Address address = addressRepository
-					.findByIdAndStatusNot(u.getAddress().getId(), Status.DELETED);
+			Address address = addressRepository.findByIdAndStatusNot(u.getAddress().getId(), Status.DELETED);
 			AddressResponse ar = new AddressResponse();
 			ar.setDistrict(address.getDistrict());
 			ar.setState(address.getState());
@@ -164,8 +161,7 @@ public class UserService {
 		if (user == null) {
 			throw new NotFoundException("User with id:" + id + " not found!");
 		}
-		Address address = addressRepository
-				.findByIdAndStatusNot(user.getAddress().getId(), Status.DELETED);
+		Address address = addressRepository.findByIdAndStatusNot(user.getAddress().getId(), Status.DELETED);
 		address.setDistrict(userEditRequest.getAddressEditRequest().getDistrict());
 		address.setState(userEditRequest.getAddressEditRequest().getState());
 
@@ -194,13 +190,11 @@ public class UserService {
 
 	public List<UserResponse> getUserByUsername(String firstName, Long loginId) {
 		List<UserResponse> userResponseList = new ArrayList<UserResponse>();
-		Login login = loginRepository.findByIdAndLoginStatusNot(loginId,
-				LoginStatus.LOGOUT);
+		Login login = loginRepository.findByIdAndLoginStatusNot(loginId, LoginStatus.LOGOUT);
 		if (login == null) {
 			throw new ServiceException("Please Login first");
 		}
-		List<User> users = userRepository.findByFullNameAndStatusNot(firstName,
-				Status.DELETED);
+		List<User> users = userRepository.findByFullNameAndStatusNot(firstName, Status.DELETED);
 		if (users.isEmpty()) {
 			throw new NotFoundException("user Not found with " + firstName);
 		}
@@ -212,8 +206,7 @@ public class UserService {
 			ur.setEmail(u.getEmail());
 			ur.setPhoneNo(u.getPhoneNo());
 			ur.setInterestField(u.getInterestField());
-			Address address = addressRepository
-					.findByIdAndStatusNot(u.getAddress().getId(), Status.DELETED);
+			Address address = addressRepository.findByIdAndStatusNot(u.getAddress().getId(), Status.DELETED);
 			AddressResponse ar = new AddressResponse();
 			ar.setDistrict(address.getDistrict());
 			ar.setState(address.getState());
@@ -225,17 +218,18 @@ public class UserService {
 	}
 
 	@Transactional
-	public void addRegisterUser(AdditionalRegisterCreationRequest addUserCreationRequest,
-			Long loginId) {
-		Login login = loginRepository.findByIdAndLoginStatusNot(loginId,
-				LoginStatus.LOGOUT);
-		// if (login == null) {
-		// throw new ServiceException("Please login!");
-		// }
+	public void addRegisterUser(AdditionalRegisterCreationRequest addUserCreationRequest, Long loginId) {
+		Login login = loginRepository.findByIdAndLoginStatusNot(loginId, LoginStatus.LOGOUT);
+		if (login == null) {
+			throw new ServiceException("Please login!");
+		}
+
+		System.out.println(addUserCreationRequest.toString());
+		String num = addUserCreationRequest.getPhoneNo();
 		System.out.println(addUserCreationRequest.getPhoneNo());
 		User user = userRepository.findByLoginAndStatusNot(login, Status.DELETED);
 		// if (addUserCreationRequest.getPhoneNo() != null)
-		user.setPhoneNo(addUserCreationRequest.getPhoneNo());
+		user.setPhoneNo(num);
 		user.setInterestField(addUserCreationRequest.getInterestedField());
 		user.setSkills(addUserCreationRequest.getSkills());
 		userRepository.save(user);
@@ -243,29 +237,29 @@ public class UserService {
 
 	@SuppressWarnings("unused")
 	public void uploadProfilePicture(String profilePicture, Long loginId) {
-		Login login = loginRepository.findByIdAndLoginStatusNot(loginId,
-				LoginStatus.LOGOUT);
-		// if (login == null) {
-		// throw new ServiceException("You are not logged in. Please login");
-		// }
+		Login login = loginRepository.findByIdAndLoginStatusNot(loginId, LoginStatus.LOGOUT);
+		if (login == null) {
+			throw new ServiceException("You are not logged in. Please login");
+		}
 		User user = userRepository.findByLoginAndStatusNot(login, Status.DELETED);
 		File file = null;
-		System.out.println("Hello from pp");
+		//String pp=profilePicture.replaceAll("\n", "aaaaaaaaa ");
+		System.out.println(profilePicture);
 		try {
 
 			if (profilePicture != null && !profilePicture.isEmpty()) {
 				// System.out.println("----------------------From pp");
-				user.setProfilePicture(new CloudinaryResource().uploadFile(
-						FileUtil.write("test", profilePicture),
+
+				user.setProfilePicture(new CloudinaryResource().uploadFile(FileUtil.write("test", profilePicture),
 						FileUtil.getFileLocation(loginId, UserRole.USER)));
 				String path = "https://res.cloudinary.com/anexus/image/upload/v1526985354/"
 						.concat(user.getProfilePicture());
 				user.setProfilePicture(path);
+
 				userRepository.save(user);
 			}
 
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			if (file != null) {
 				file.delete();
@@ -275,22 +269,18 @@ public class UserService {
 
 	@Transactional
 	public User followingUser(Long loginId, Long followId) {
-		Login loginFollowing = loginRepository.findByIdAndLoginStatusNot(loginId,
-				LoginStatus.LOGOUT);
+		Login loginFollowing = loginRepository.findByIdAndLoginStatusNot(loginId, LoginStatus.LOGOUT);
 		if (loginFollowing == null) {
 			throw new ServiceException("You are not logged in. Please login");
 		}
-		Login loginToFollow = loginRepository.findByIdAndStatusNot(followId,
-				Status.DELETED);
-		User userFollowing = userRepository.findByLoginAndStatusNot(loginFollowing,
-				Status.DELETED);
-		User userFollowed = userRepository.findByLoginAndStatusNot(loginToFollow,
-				Status.DELETED);
+		Login loginToFollow = loginRepository.findByIdAndStatusNot(followId, Status.DELETED);
+		User userFollowing = userRepository.findByLoginAndStatusNot(loginFollowing, Status.DELETED);
+		User userFollowed = userRepository.findByLoginAndStatusNot(loginToFollow, Status.DELETED);
 		if (userFollowing == userFollowed) {
 			throw new ServiceException("user cannot follow him/herself");
 		}
-		Follower follower = followerRepository.findByUserAndFollowingIdAndStatusNot(
-				new User(userFollowing.getId()), userFollowed.getId(), Status.DELETED);
+		Follower follower = followerRepository.findByUserAndFollowingIdAndStatusNot(new User(userFollowing.getId()),
+				userFollowed.getId(), Status.DELETED);
 		if (follower != null)
 			throw new ServiceException("user already followed");
 		follower = new Follower();

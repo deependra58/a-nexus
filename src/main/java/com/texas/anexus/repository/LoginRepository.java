@@ -16,6 +16,4 @@ public interface LoginRepository extends JpaRepository<Login, Long> {
 
 	Login findByIdAndLoginStatusNot(Long loginId, LoginStatus logout);
 
-
-
 }

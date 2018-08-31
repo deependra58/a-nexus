@@ -20,5 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long>{
 
 	List<User> findByFullNameAndStatusNot(String firstName, Status deleted);
 
+	User findByEmailAndStatusNot(String email, Status deleted);
+
 
 }

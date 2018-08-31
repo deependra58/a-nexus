@@ -97,25 +97,25 @@ public class UserController {
 		return new ResponseEntity<Object>(interestFields, HttpStatus.OK);
 	}
 
-	/* API for uploading user profile picture */
-
-	@ApiOperation(value = "Upload profile picture")
-	@RequestMapping(value = "uploadPic", method = RequestMethod.POST)
-	public ResponseEntity<Object> uploadImage(@RequestBody String profilePicture,
-			@RequestHeader Long loginId) {
-		userService.uploadProfilePicture(profilePicture, loginId);
-		return new ResponseEntity<Object>("Profile Picture Updated Successfully",
-				HttpStatus.OK);
-
-	}
-
-	@ApiOperation(value = "Register user")
-	@RequestMapping(value = "additionalRegister", method = RequestMethod.POST)
-	public ResponseEntity<Object> registerUser(
-			@RequestBody AdditionalRegisterCreationRequest addUserCreationRequest,
-			@RequestHeader Long LoginId) {
-		userService.addRegisterUser(addUserCreationRequest, LoginId);
-		return new ResponseEntity<Object>("Registered Successfully", HttpStatus.OK);
-	}
+//	/* API for uploading user profile picture */
+//
+//	@ApiOperation(value = "Upload profile picture")
+//	@RequestMapping(value = "uploadPic", method = RequestMethod.POST)
+//	public ResponseEntity<Object> uploadImage(@RequestBody String profilePicture,
+//			@RequestHeader Long loginId) {
+//		userService.uploadProfilePicture(profilePicture, loginId);
+//		return new ResponseEntity<Object>("Profile Picture Updated Successfully",
+//				HttpStatus.OK);
+//
+//	}
+//
+//	@ApiOperation(value = "Register user")
+//	@RequestMapping(value = "additionalRegister", method = RequestMethod.POST)
+//	public ResponseEntity<Object> registerUser(
+//			@RequestBody AdditionalRegisterCreationRequest addUserCreationRequest,
+//			@RequestHeader Long LoginId) {
+//		userService.addRegisterUser(addUserCreationRequest, LoginId);
+//		return new ResponseEntity<Object>("Registered Successfully", HttpStatus.OK);
+//	}
 
 }

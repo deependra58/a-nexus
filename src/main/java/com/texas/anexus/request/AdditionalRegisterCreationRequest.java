@@ -1,5 +1,7 @@
 package com.texas.anexus.request;
 
+import java.util.Arrays;
+
 import javax.validation.constraints.NotNull;
 
 public class AdditionalRegisterCreationRequest {
@@ -27,6 +29,11 @@ public class AdditionalRegisterCreationRequest {
 	}
 	public void setSkills(String[] skills) {
 		this.skills = skills;
+	}
+	@Override
+	public String toString() {
+		return "AdditionalRegisterCreationRequest [phoneNo=" + phoneNo + ", interestedField="
+				+ Arrays.toString(interestedField) + ", skills=" + Arrays.toString(skills) + "]";
 	}
 	
 	
